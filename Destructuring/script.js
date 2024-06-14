@@ -29,6 +29,16 @@ const restaurant = {
   order: function (starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
+  orderDelivery: function ({
+    starterIndex = "1",
+    mainIndex,
+    time = "20:00",
+    address,
+  }) {
+    console.log(
+      `Order received: Your ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}.`
+    );
+  },
 };
 
 // Destructuring - A ES6 feature to break down, retreiving and collecting data from a complex data structure to a more simpler version by storing in a variable.
@@ -64,3 +74,50 @@ console.log(i, j, k);
 // 1 will appear when the array is ended.
 const [p = 1, q = 1, r = 1] = [8, 9];
 console.log(p, q, r);
+
+/////////////////////////////////////////
+// Destructuring Objects
+const { nameRest, openingHours, categories } = restaurant;
+console.log(nameRest, openingHours, categories);
+
+// Variables names different from property names
+const {
+  nameRest: restaurantName,
+  openingHours: hours,
+  categories: tags,
+} = restaurant;
+
+console.log(restaurantName, hours, tags);
+
+// Default values if somethig doesn't exist in the object (menu doesn't exist)
+const { menu = [], starterMenu: starters = [] } = restaurant;
+console.log(menu, starters);
+
+// Mutating variables while destructuring
+let a1 = 111;
+let a2 = 999;
+let obj = { a1: 23, a2: 7, a3: 14 };
+
+({ a1, a2 } = obj);
+console.log(a1, a2);
+
+// Nested Objects examples
+const {
+  fri: { open, close },
+} = openingHours;
+console.log(open, close);
+
+// Practical example
+restaurant.orderDelivery({
+  time: "22:30",
+  address: "9 Grove Way",
+  mainIndex: 2,
+  starterIndex: 2,
+});
+
+restaurant.orderDelivery({
+  time: "18:30",
+  address: "92 Avenue Close",
+  mainIndex: 1,
+  starterIndex: 4,
+});
