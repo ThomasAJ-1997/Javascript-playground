@@ -54,3 +54,106 @@ const newPassport = function (person) {
 
 newPassport(jones);
 checkIn(flight, jones);
+
+/////////////////////////////////////////////////////////
+// Higher order Functions
+const oneWord = function (str) {
+  return str.replace(/ /g, "").toLowerCase();
+};
+
+const upperCaseFirstWord = function (str) {
+  const [firstWord, ...other] = str.split(" ");
+  return [firstWord.toUpperCase(), ...other].join(" ");
+};
+
+// Higher order function: takes in another function
+const transform = function (str, fn) {
+  console.log(`Original string ${str}`);
+  console.log(`Transformed string: ${fn(str)}`);
+  console.log(`Transformed by: ${fn.name}`);
+};
+
+transform("JavaScript is the number 1 language", upperCaseFirstWord);
+transform("JavaScript is the number 1 language", oneWord);
+
+//Foreach example
+const highFive = function () {
+  console.log("👋");
+};
+document.body.addEventListener("click", highFive);
+
+["Thomas", "Smith", "Adam"].forEach(highFive);
+/////////////////////////////////////////////////////
+// Functions returning functions
+const helloFN = function (greeting) {
+  return function (name) {
+    console.log(`${greeting} ${name}! Nice to meet you.`);
+  };
+};
+
+const greetPerson = helloFN("Hey");
+greetPerson("Thomas");
+greetPerson("Sammantha");
+
+helloFN("Hello")("Jones");
+
+// Arrow function example
+const greetArrowFN = (greeting2) => (name2) =>
+  console.log(`${greeting2} ${name2}! Have a nice day.`);
+
+greetArrowFN("Hi")("Gregory");
+/////////////////////////////////////////////////////
+// The Call & Apply Methods
+const britishAirways = {
+  airline: "British Airways",
+  iataCode: "BA",
+  bookings: [],
+  book(flightNum, passengerName) {
+    console.log(
+      `Hi ${passengerName}. You've booked a seat on the ${this.airline} flight number${this.iataCode}${flightNum}.`
+    );
+    this.bookings.push({
+      flight: `${this.iataCode}${flightNum}`,
+      passengerName,
+    });
+  },
+};
+
+britishAirways.book(239, "Thomas Jones");
+britishAirways.book(492, "Mike Smith");
+console.log(britishAirways);
+
+// New airline
+const eurowings = {
+  airline: "Eurowings",
+  iataCode: "EW",
+  bookings: [],
+};
+
+const bookFlight = britishAirways.book;
+
+// book(23, "Sarah Willis"); = this won't work as the THIS keyword now points to underfined
+
+// CALL METHOD
+bookFlight.call(eurowings, 23, "Sarah Willis");
+console.log(eurowings);
+
+bookFlight.call(britishAirways, 453, "Mary Smith");
+console.log(britishAirways);
+
+const swiss = {
+  airline: "Swiss Air Lines",
+  iataCode: "LX",
+  bookings: [],
+};
+
+bookFlight.call(swiss, 583, "Andrew Jones");
+
+// APPLY METHOD (not receives a lit of arguements but takes an Array)
+// Apply isn't used much anymore in ES6
+const flightData = [583, "George Cooper"];
+bookFlight.apply(swiss, flightData);
+console.log(swiss);
+
+bookFlight.call(swiss, ...flightData); // Same as apply (Use call method and spread operator)
+//////////////////////////////////////////////
