@@ -77,12 +77,12 @@ transform("JavaScript is the number 1 language", upperCaseFirstWord);
 transform("JavaScript is the number 1 language", oneWord);
 
 //Foreach example
-const highFive = function () {
-  console.log("👋");
-};
-document.body.addEventListener("click", highFive);
+// const highFive = function () {
+//   console.log("👋");
+// };
+// document.body.addEventListener("click", highFive);
 
-["Thomas", "Smith", "Adam"].forEach(highFive);
+// ["Thomas", "Smith", "Adam"].forEach(highFive);
 /////////////////////////////////////////////////////
 // Functions returning functions
 const helloFN = function (greeting) {
@@ -157,3 +157,49 @@ console.log(swiss);
 
 bookFlight.call(swiss, ...flightData); // Same as apply (Use call method and spread operator)
 //////////////////////////////////////////////
+// The Bind Method
+const bookEW = bookFlight.bind(eurowings); // Return a new function
+const bookBA = bookFlight.bind(britishAirways);
+const bookSW = bookFlight.bind(swiss);
+bookEW(23, "Steven Williams");
+
+const bookEW23 = bookFlight.bind(eurowings, 23);
+bookEW23("Harry Jones");
+bookEW23("Sarah Preene");
+
+// With event listeners.
+// With Event Listeners
+britishAirways.planes = 300;
+britishAirways.buyPlane = function () {
+  console.log(this);
+
+  this.planes++;
+  console.log(this.planes);
+};
+// britishAirways.buyPlane();
+
+document
+  .querySelector(".buy")
+  .addEventListener("click", britishAirways.buyPlane.bind(britishAirways));
+
+// Partial application (use case for BIND)
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.1, 200));
+
+const addVAT = addTax.bind(null, 0.23);
+console.log(addVAT(100));
+console.log(addVAT(232));
+console.log(addVAT(345));
+
+// Function return challenge
+const addTaxRate = function (rate) {
+  return function (value) {
+    return value + value * rate;
+  };
+};
+
+const addVAT2 = addTaxRate(0.23);
+console.log(addVAT2(100));
+console.log(addVAT2(232));
+console.log(addVAT2(345));
+/////////////////////////////////////////////
