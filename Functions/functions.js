@@ -203,3 +203,87 @@ console.log(addVAT2(100));
 console.log(addVAT2(232));
 console.log(addVAT2(345));
 /////////////////////////////////////////////
+// Invoked Function Expressions
+
+(function () {
+  //Wrap in ()
+  console.log("This function will be removed when executed");
+})();
+
+(() => console.log("This arrow function will be removed when executed"))();
+
+// Code Block: Data Privacy
+{
+  const isPrivate = 23;
+  // Private variable' and cannot be accessed using let or const
+  // Var however ignores the block and scope.
+}
+
+/////////////////////////////////////////////
+// Closures
+const secureBooking = function () {
+  //Local Scope: Secure booking Scope
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passangers`);
+  };
+};
+
+// Global execution context:
+const bookingSystem = secureBooking();
+
+bookingSystem(); //1 Passanger
+bookingSystem(); //2 Passanger
+bookingSystem(); //3 Passanger
+
+// Variable environment of bookingSystem (Closure)
+// console.dir(bookingSystem);
+
+///////////////////////////////////////////////////////
+// More Closure Case Examples: Identify them in code
+// Example: Return a function from another function
+
+// Example 01
+let f; //Global Scope
+
+const g = function () {
+  // Closure: of variable environment
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+const h = function () {
+  const b = 777;
+  // F variable with be assigned again by the closure
+  // F is now a different function compared to the code above.
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f(); //46 = (23 * 2);
+
+h();
+f(); //1554 = (777 * 2);
+
+// The closure now has the value of B, not A at this point in time.
+// console.dir(f);
+
+// Example 2: A timer
+const boardingPassangers = function (n, wait) {
+  const perGroup = n / 3; // Closures have priority.
+
+  setTimeout(function () {
+    console.log(`We are now boarding all ${n} passangers`);
+    console.log(`There are three groups with ${perGroup} passasngers`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds`);
+};
+const perGroup = 1000; //Closures have priority, not the scope chain.
+boardingPassangers(180, 3);
