@@ -182,3 +182,50 @@ console.log(CurrenciesUnique);
 CurrenciesUnique.forEach(function (value, key, set) {
   console.log(`${key}: ${value}`);
 });
+
+////////////////////////////////////////////////
+
+// MAP Method
+const movementsTwi = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const euroToUSD = 1.1;
+
+// Programming paradigm: functional programming
+const movementsUSD = movements.map(function (mov) {
+  return mov * euroToUSD;
+  // map method creates new array from the original with the euroToUSB variable calculation
+});
+
+// Arrow function version: one line of code: cleaner code
+const movementsUSDArrow = movements.map((mov) => mov * euroToUSD);
+
+console.log(movements);
+console.log(movementsUSD);
+
+// Same thing as above code as a for of loop
+// const movementsUSDforOF = [];
+// for (const mov of movements) movementsUSDforOF.push(mov * euroToUSD);
+// console.log(movementsUSDforOF);
+
+const movementsDesc = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? "deposited" : "withdrew"} ${Math.abs(
+      mov
+    )}`
+);
+
+console.log(movementsDesc);
+console.log("\n");
+
+//////////////////////////////////////
+// Filter Method
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+
+console.log(movements);
+console.log(deposits); //Filter out withdraw
+console.log("\n");
+
+const withdrawal = movements.filter((mov) => mov < 0);
+console.log(movements);
+console.log(withdrawal);
