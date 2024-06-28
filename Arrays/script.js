@@ -229,3 +229,34 @@ console.log("\n");
 const withdrawal = movements.filter((mov) => mov < 0);
 console.log(movements);
 console.log(withdrawal);
+
+// The Reduce Method
+// The accumlator / current element / current index / array
+const balance = movements.reduce(function (acc, curr, i, arr) {
+  console.log(`Iteration number ${i}: ${acc}`);
+  return acc + curr;
+}, 0);
+
+console.log("\n");
+
+// Arrow function verions
+const balanceArr = movements.reduce((acc, curr) => acc + curr, 0);
+
+console.log(`Your balance is: ${balance}`);
+
+// Maximum value with reduce method
+const max = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]);
+console.log(`The maximum value is: ${max}`);
+
+// Chaining methods
+const euroToUSDConvert = 1.1;
+// PIPELINE
+const totalDespositUSD = movements
+  .filter((mov) => mov > 0)
+  .map((mov) => mov * euroToUSD)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(totalDespositUSD);
