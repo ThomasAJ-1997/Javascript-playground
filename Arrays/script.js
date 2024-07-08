@@ -260,3 +260,27 @@ const totalDespositUSD = movements
   .reduce((acc, mov) => acc + mov, 0);
 
 console.log(totalDespositUSD);
+///////////////////////////////////////
+// Find Method
+const firstWithdrawel = movements.find((mov) => mov < 0);
+console.log(movements);
+console.log(firstWithdrawel);
+
+console.log(accounts);
+
+const account = accounts.find((acc) => acc.owner === "Jessica Davis");
+console.log(account);
+
+// Some Method
+console.log(movements);
+
+// INCLUDES: CHECKS EQUALITY
+console.log(movements.includes(-130));
+
+// SOME: CHECKS CONDITION
+const anyDeposits = movements.some((mov) => mov > 0);
+console.log(anyDeposits);
+
+// EVERY METHOD
+console.log(movements.every((mov) => mov > 0));
+console.log(account1.movements.every((mov) => mov > 0));
