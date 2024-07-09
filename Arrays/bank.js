@@ -61,9 +61,14 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayMovements = function (movements) {
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = "";
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? "deposit" : "withdrawal";
 
     const html = `
@@ -240,3 +245,54 @@ console.log(account1.movements.filter(deposit));
 console.log(account2.movements.filter(deposit));
 console.log(account3.movements.filter(deposit));
 console.log(account4.movements.filter(deposit));
+
+// const accountMovements = accounts.map((acc) => acc.movements);
+// console.log(accountMovements);
+
+// const allMovements = accountMovements.flat();
+// console.log(allMovements);
+
+// const overallBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+// console.log(overallBalance);
+
+// With Optional Chaining
+const completeBalance = accounts
+  .map((acc) => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(`Complete balance: $${completeBalance}`);
+
+// With Flat Map
+const completeBalanceFlatMap = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(`Complete balance with flatMap: $${completeBalanceFlatMap}`);
+
+// Sort Method
+// return < 0, A, B
+// return > 0, B, A
+
+// Ascending Order
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Descending Order
+movements.sort((a, b) => b - a);
+console.log(movements);
+
+let sorted = false;
+
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
+labelBalance.addEventListener("click", function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    (el) => Number(el.textContent.replace("$", ""))
+  );
+
+  console.log(movementsUI);
+});

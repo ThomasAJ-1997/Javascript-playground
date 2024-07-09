@@ -284,3 +284,33 @@ console.log(anyDeposits);
 // EVERY METHOD
 console.log(movements.every((mov) => mov > 0));
 console.log(account1.movements.every((mov) => mov > 0));
+
+// FLAT and FLAT MAP METHOD
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrNested = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrNested.flat); // The flat only goes one level deep when trying to flat the array.
+
+console.log(arrNested.flat(2)); // This will flat the array
+
+// Sort Movements
+const owners = ["Thomas", "Sam", "Adam", "Martha"];
+console.log(owners.sort);
+
+// Creating and filling arrays
+const arrY = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+console.log(new Array(1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+// Creating arrays programatically
+const arrX = Array(7);
+console.log(arrX); // Seven empty arguments
+
+arrX.fill(1, 3, 5);
+console.log(arrX);
+
+const arrZ = Array.from({ length: 7 }, () => 1);
+console.log(arrZ);
+
+const arrZZ = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(arrZZ);
