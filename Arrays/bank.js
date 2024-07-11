@@ -296,3 +296,72 @@ labelBalance.addEventListener("click", function () {
 
   console.log(movementsUI);
 });
+
+console.log("\n");
+
+///////////////////////////////////////////////////////
+// Array Practice Session - everything learned
+
+// 1. Display all deposits from all accounts in a single array.
+const bankDepositSum = accounts
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov > 0)
+  .reduce((sum, cur) => sum + cur, 0);
+console.log(bankDepositSum);
+
+// 2. Deposits with over $1000
+// Solution 1
+const numberDeposits1000 = accounts
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov >= 1000);
+
+console.log(numberDeposits1000);
+
+// solution 2
+const numberDeposits1000Reduce = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((count, cur) => (cur >= 1000 ? count + 1 : count), 0);
+
+console.log(numberDeposits1000Reduce);
+
+let a = 10;
+console.log(a++); // 10
+console.log(a); //  11
+
+// Solution to this problem: write
+console.log(a++); // 11
+console.log(a); // 12
+
+// The ++ operater does increment the value but still returns the previous value.
+
+// 3. The Reduce Method: Create a new object
+// Sum of the deposits and withdraws
+// We always have to return the accumilator from each iteration.
+const { deposits, withdrawals } = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      sums[cur > 0 ? "deposits" : "withdrawals"] += cur;
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+
+console.log(deposits, withdrawals);
+
+// 4. Function to convert string to title case: all the words are capitalise besides SOME exceptions.
+const convertTitleCase = function (title) {
+  const exceptions = ["a", "an", "and", "the", "but", "or", "on", "in", "with"];
+  const titleConversionCase = title
+    .toLowerCase()
+    .split(" ")
+    .map((word) =>
+      exceptions.includes(word) ? word : word[0].toUpperCase() + word.slice(1)
+    );
+
+  return titleConversionCase;
+};
+console.log(convertTitleCase("this is a nice title"));
+console.log(convertTitleCase("this is a LONG title but not too long"));
+console.log(convertTitleCase("and here is another title with an EXAMPLE"));
+////////////////////////////////////////////////////////////////////////////
