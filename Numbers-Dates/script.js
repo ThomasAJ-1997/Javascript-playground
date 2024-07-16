@@ -185,6 +185,26 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function () {
+  // Set time to 5:00
+  let timer = 300;
+  // Call the time every second
+  const timeLogOut = setInterval(function () {
+    const min = String(Math.trunc(timer / 60)).padStart(2, 0);
+    const sec = String(timer % 60).padStart(2, 0);
+    // In each call, print the remaining time to the UI
+    labelTimer.textContent = `${min}:${sec}`;
+    // Decrease by one second
+    timer--;
+    // When the timer is at ZERO: stop timer and log out user.
+    if (timer === 0) {
+      clearInterval(timeLogOut);
+      labelWelcome.textContent = "Log in to get started";
+      containerApp.style.opacity = 0;
+    }
+  }, 1000);
+};
+
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
@@ -228,19 +248,21 @@ btnLogin.addEventListener("click", function (e) {
 
     // Current date and time on account
 
-    const day = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth()}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
-    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    // const day = `${now.getDate()}`.padStart(2, 0);
+    // const month = `${now.getMonth()}`.padStart(2, 0);
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
-    const calcDaysPassed = (date1, date2) =>
-      (date2 - date1) / (1000 * 60 * 60 * 24);
+    // const calcDaysPassed = (date1, date2) =>
+    //   (date2 - date1) / (1000 * 60 * 60 * 24);
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = "";
     inputLoginPin.blur();
+
+    startLogOutTimer();
 
     // Update UI
     updateUI(currentAccount);
@@ -283,14 +305,16 @@ btnLoan.addEventListener("click", function (e) {
     amount > 0 &&
     currentAccount.movements.some((mov) => mov >= amount * 0.1)
   ) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 3000);
   }
   inputLoanAmount.value = "";
 });
@@ -560,3 +584,33 @@ const optionsTwo = {
 console.log(`US:`, new Intl.NumberFormat("en-US", optionsTwo).format(num));
 console.log(`Germany:`, new Intl.NumberFormat("de-GE", optionsTwo).format(num));
 console.log(`Syria:`, new Intl.NumberFormat("ar-SY", optionsTwo).format(num));
+///////////////////////////////////////////////////////////////////////////////
+// TIMERS
+// SetTimout: runs once for a duration of time.
+// SetInterval: runs forever until it is triggered to end.
+const foodArr = ["olives", "Spinach"];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2}`),
+  3000,
+  ...foodArr
+);
+
+// requires callback function
+console.log("Waiting...");
+// The code execution doesn't stop at 3000, and the code execution will continue.
+
+if (foodArr.includes("Spinach")) clearTimeout(pizzaTimer);
+
+// SetInterval: logged every second
+// setInterval(function () {
+//   const now = new Date();
+//   console.log(now);
+// }, 1000);
+
+// setInterval(function () {
+//   const now = new Date();
+//   const hours = now.getHours();
+//   const minute = now.getMinutes();
+//   const second = now.getSeconds();
+//   console.log(`${hours}:${minute}:${second}`);
+// }, 1000);
