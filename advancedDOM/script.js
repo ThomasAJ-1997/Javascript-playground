@@ -8,6 +8,12 @@ const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 const buttonSmoothScroll = document.querySelector(".btn--scroll-to");
 const section1 = document.querySelector("#section--1");
 
+const nav = document.querySelector(".nav");
+
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+
 ///////////////////////////////////////
 // Modal window
 const openModal = function (e) {
@@ -31,6 +37,62 @@ document.addEventListener("keydown", function (e) {
     closeModal();
   }
 });
+
+///////////////////////////////////////////////////////////////
+// STICKY NAVIGATION
+
+// Scroll Event: This should be avoided as it is bad for performance.
+const inititalCoords = section1.getBoundingClientRect();
+console.log(inititalCoords);
+
+window.addEventListener("scroll", function (e) {
+  console.log(window.scrollY);
+
+  if (window.scrollY > inititalCoords.top) nav.classList.add("sticky");
+  else nav.classList.remove("sticky");
+});
+///////////////////////////////////////////////////////////////
+// LINK HOVER AFFECT
+const handleHover = function (e, opacity) {
+  console.log(this);
+  if (e.target.classList.contains("nav__link")) {
+    const clickedLink = e.target;
+    const siblingLinks = link.closest(".nav").querySelectorAll(".nav__link");
+    const logo = clickedLink.closest(".nav").querySelector("img");
+
+    siblingLinks.forEach((element) => {
+      if (element !== clickedLink) element.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+nav.addEventListener("mouseover", handleHover.bind(0.5));
+
+nav.addEventListener("mouseout", handleHover.bind(1));
+
+///////////////////////////////////////////////////////////////
+
+// TABBED COMPONENT
+
+tabsContainer.addEventListener("click", function (e) {
+  const clickedBtn = e.target.closest(".operations__tab");
+
+  if (!clickedBtn) return; // A guard clause: If nothing is clicked.
+
+  tabs.forEach((tab) => tab.classList.remove("operations__tab--active"));
+  tabsContent.forEach((content) =>
+    content.classList.remove("operations__content--active")
+  );
+
+  clickedBtn.classList.add("operations__tab--active");
+
+  // Active content
+  document
+    .querySelector(`.operations__content--${clickedBtn.dataset.tab}`)
+    .classList.add("operations__content--active");
+});
+
 ///////////////////////////////////////////////////////////////
 
 // SMOOTH SCROLLING
@@ -241,7 +303,7 @@ message.style.height =
   Number.parseFloat(getComputedStyle(message).height, 10) + 40 + "px";
 
 // CSS custom properties
-document.documentElement.style.setProperty("--color-primary", "orangered");
+// document.documentElement.style.setProperty("--color-primary", "orangered");
 // Change all --color-primary properties in one go.Can be anything from color, width or padding and etc.
 
 // ATTRIBUTES
@@ -274,3 +336,38 @@ console.log(logo.dataset.versionNumber);
 // logo.classList.remove();
 // logo.classList.toggle();
 // logo.classList.contains();
+
+///////////////////////////////////////////////////////////////////
+// DOM Traversing example
+const h1Title = document.querySelector("h1");
+
+// going downwards: accessing child elements
+console.log(h1.querySelectorAll(".highlight"));
+console.log(h1.childNodes); // Node List of elements
+console.log(h1.children); // HTML collection of elements (only works for direct children)
+// h1.firstElementChild.style.color = "white"; // Only first child gets styled.
+// h1.lastElementChild.style.color = "orangered";
+
+// Going upwards: accessing parent elements.
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+
+// Find a parent element not matter who far away it is in the DOM tree.
+// h1.closest(".header").style.background = "var(--gradient-secondary)";
+// h1.closest("h1").style.background = "var(--gradient-secondary)";
+
+// We can look at closest as the opposite of querySelector, so both receive a query string as an input, but querySelector finds children no matter how deep in the DOM tree, while the closest method finds parent elements no matter how far in the DOM tree.
+
+// Goging sideways: selecting sibling elements
+// We can only access previous and next sibling elements
+console.log(h1.previousElementSibling);
+console.log(h1.nextElementSibling);
+// Nodes
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+// All siblings
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) el.style.transform = "scale(0.5)";
+// });
