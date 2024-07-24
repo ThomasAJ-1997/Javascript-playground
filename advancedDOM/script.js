@@ -37,20 +37,103 @@ document.addEventListener("keydown", function (e) {
     closeModal();
   }
 });
+///////////////////////////////////////////////////////////////
+// LAZY LOADING IMAGES
+const imgTargets = document.querySelectorAll("img[data-src]");
+
+const loadingImgs = function (entires, observer) {
+  const [entry] = entires;
+  console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  // Replace scr with data-src
+  entry.target.src = entry.target.dataset.src;
+  entry.target.addEventListener("load", function () {
+    entry.target.classList.remove("lazy-img");
+  });
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadingImgs, {
+  root: null,
+  threshold: 0,
+  rootMargin: "200px",
+});
+
+imgTargets.forEach((img) => imgObserver.observe(img));
+
+///////////////////////////////////////////////////////////////
+// REVEALING ELEMENTS ON SCROLL
+const sectionWebPage = document.querySelectorAll("section");
+const revealSection = function (entires, observer) {
+  const [entry] = entires;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove("section--hidden");
+  observer.unobserve(entry.target); // When we no longer need the observer.
+};
+
+const sectionRevealObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+sectionWebPage.forEach(function (section) {
+  sectionRevealObserver.observe(section);
+  section.classList.add("section--hidden");
+});
 
 ///////////////////////////////////////////////////////////////
 // STICKY NAVIGATION
 
-// Scroll Event: This should be avoided as it is bad for performance.
-const inititalCoords = section1.getBoundingClientRect();
-console.log(inititalCoords);
+// Intersection Observer API: Sticky Navigation
 
-window.addEventListener("scroll", function (e) {
-  console.log(window.scrollY);
+// const obsCallback = function (entries, observer) {
+//   entries.forEach((entry) => {
+//     console.log(entry);
+//   });
+// };
 
-  if (window.scrollY > inititalCoords.top) nav.classList.add("sticky");
+// const observerOptions = {
+//   root: null, // THE VIEWPORT
+//   threshold: [0, 0.2], // The callback will trigger when the target element leaves the view or enters the view.
+// };
+
+// const observer = new IntersectionObserver(obsCallback, observerOptions);
+// observer.observe(section1);
+
+const headerSection = document.querySelector(".header");
+const navHeight = nav.getBoundingClientRect().height;
+console.log(navHeight);
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) nav.classList.add("sticky");
   else nav.classList.remove("sticky");
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `${navHeight}px`,
 });
+headerObserver.observe(headerSection);
+
+// Scroll Event: This should be avoided as it is bad for performance.
+
+// const inititalCoords = section1.getBoundingClientRect();
+// console.log(inititalCoords);
+
+// window.addEventListener("scroll", function (e) {
+//   console.log(window.scrollY);
+
+//   if (window.scrollY > inititalCoords.top) nav.classList.add("sticky");
+//   else nav.classList.remove("sticky");
+// });
 ///////////////////////////////////////////////////////////////
 // LINK HOVER AFFECT
 const handleHover = function (e, opacity) {
