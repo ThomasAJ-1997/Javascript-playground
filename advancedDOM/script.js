@@ -38,6 +38,95 @@ document.addEventListener("keydown", function (e) {
   }
 });
 ///////////////////////////////////////////////////////////////
+// SLIDER COMPONENT
+const sliderFunctionality = function () {
+  const slides = document.querySelectorAll(".slide");
+
+  const slider = document.querySelector(".slider");
+  const btnLeft = document.querySelector(".slider__btn--left");
+  const btnRight = document.querySelector(".slider__btn--right");
+  const dotsContainer = document.querySelector(".dots");
+
+  let currentSlide = 0;
+  const maxSlides = slides.length;
+
+  // slider.style.transform = `scale(0.3) translateX(-1200px)`;
+  // slider.style.overflow = `visible`;
+
+  // Functions
+  const createDots = function () {
+    slides.forEach(function (_, i) {
+      dotsContainer.insertAdjacentHTML(
+        "beforeend",
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+
+  const activeDot = function (slide) {
+    document
+      .querySelectorAll(".dots__dot")
+      .forEach((dot) => dot.classList.remove("dots__dot--active"));
+
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add("dots__dot--active");
+  };
+
+  const sliderMove = function (slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+  };
+
+  // Next slide
+  const nextSlide = function () {
+    if (currentSlide === maxSlides - 1) {
+      currentSlide = 0;
+    } else {
+      currentSlide++;
+    }
+    sliderMove(currentSlide);
+    activeDot(currentSlide);
+  };
+
+  const prevSlide = function () {
+    if (currentSlide === 0) {
+      currentSlide = maxSlides - 1;
+    } else {
+      currentSlide--;
+    }
+
+    sliderMove(currentSlide);
+    activeDot(currentSlide);
+  };
+
+  const init = function () {
+    sliderMove(0);
+    createDots();
+    activeDot(0);
+  };
+  init();
+
+  // Event Handlers
+  btnRight.addEventListener("click", nextSlide);
+  btnLeft.addEventListener("click", prevSlide);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") prevSlide();
+    if (e.key === "ArrowRight") nextSlide();
+  });
+
+  dotsContainer.addEventListener("click", function (e) {
+    if (e.target.classList.contains("dots__dot")) {
+      const { slide } = e.target.dataset;
+      sliderMove(slide);
+      activeDot(slide);
+    }
+  });
+};
+sliderFunctionality();
+///////////////////////////////////////////////////////////////
 // LAZY LOADING IMAGES
 const imgTargets = document.querySelectorAll("img[data-src]");
 
@@ -454,3 +543,25 @@ console.log(h1.nextSibling);
 // [...h1.parentElement.children].forEach(function (el) {
 //   if (el !== h1) el.style.transform = "scale(0.5)";
 // });
+
+//////////////////////////////////////////////////////
+// Lifesycle DOM Events
+
+// 1. DOM content loaded: This is fired by the document, This is when the HTMl is parsed and downloaded converted to the DOM tree. All scripts must be downloaded and executed beforre the DOM content is loaded.
+document.addEventListener("DOMContentLoaded", function (e) {
+  console.log("HTML Parsesd and DOM tree built!", e);
+});
+
+// When the script tag at the end, we dont need to listen to the DOM content loaded.
+
+// 2. Load Event: Fired by the window, but when the HTML, images and external files (css are parsed)
+window.addEventListener("load", function (e) {
+  console.log("Page fully loaded.", e);
+});
+
+// 3. Before Unload Event: This is created just when the leaver leaves the page.
+window.addEventListener("beforeunload", function (e) {
+  e.preventDefault();
+  console.log(e);
+  // e.returnValue = "";
+});
